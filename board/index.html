@@ -11,6 +11,7 @@
       position: absolute;
       text-align: center;
       border: 1px solid #d3d3d3;
+      background-color: white;
     }
 
     .movable:focus-within {
@@ -95,10 +96,26 @@
       grid-template-columns: repeat(4, 1fr);
     }
 
+    .layout-grid2 {
+      background: white;
+      resize: both;
+      overflow: auto;
+      display: grid;
+      width: 600px;
+      min-width: 600px;
+      min-height: 500px;
+      grid-template-rows: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+    }
+
     .layout-item {
       border: 1px solid black;
       grid-column: span 4;
       background-color: #f1f1f1;
+    }
+
+    .overflow-auto {
+      overflow-y: auto;
     }
 
     .layout-item.subcard {
@@ -118,7 +135,6 @@
 
 <body>
   <section class="board">
-
     <div class="movable js-movable" tabindex="1">
       <div class="movable-header js-movable-header">Click here to move</div>
       <div class="layout-grid resizable js-resizable" data-card-id="3">
@@ -184,6 +200,67 @@
         </div>
       </div>
     </div>
+    <div class="movable js-movable" tabindex="1">
+      <div class="movable-header js-movable-header">Click here to move</div>
+      <input id="row1" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row1Change(this)">
+      <input id="row2" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row2Change(this)">
+      <input id="row3" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row3Change(this)">
+      <div class="layout-grid2 js-layout-grid2 resizable js-resizable" data-card-id="4">
+        <div id="5" class="layout-item main">
+          <h1>MAINCARD GRID - 3 ROWS</h1>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+            expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+            quae eius mollitia?
+          </p>
+          <button>BUTTON</button>
+        </div>
+
+        <div id="6" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop10">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag10">
+            <h2>SUBCARD 1</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width6" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+        <div id="7" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop11">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag11">
+            <h2>SUBCARD 2</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <button>BUTTON</button>
+          </div>
+          width
+          <input id="width7" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+        <div id="8" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop12">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag12">
+            <h2>SUBCARD 3</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width8" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+      </div>
+    </div>
+
     <div class="movable js-movable" tabindex="1">
       <div class="movable-header js-movable-header">Click here to move</div>
       <div class="layout resizable js-resizable" data-card-id="1">
@@ -365,7 +442,7 @@
       for (let entry of entries) {
         if (entry.contentBoxSize) {
           const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
-          entry.target.parentElement.focus();
+          // entry.target.parentElement.focus();
           console.log(`Size changed for card id: ${entry.target.dataset.cardId} to height: ${contentBoxSize.blockSize} and width: ${contentBoxSize.inlineSize}`);
         }
       }
@@ -390,6 +467,35 @@
       const parentElement = document.getElementById(element.id).parentElement;
       parentElement.style.gridColumn = `span ${element.value}`;
     }
+
+    function row1Change(element) {
+        const nextElement = document.getElementById('row2');
+        nextElement.value = 50 - element.value;
+        updateRowHeights();
+      }
+      function row2Change(element) {
+        const nextElement = document.getElementById('row3');
+        nextElement.value = 50 - element.value;
+        updateRowHeights();
+      }
+      function row3Change(element) {
+        updateRowHeights();
+      }
+      function updateRowHeights(){
+        const grid = document.getElementsByClassName('js-layout-grid2')[0];
+        const rowInputs = document.getElementsByClassName('js-row-input');
+
+        let result = '';
+        let sum = 0;
+        for (var i = 0; i < rowInputs.length; i++) {
+          sum += Number(rowInputs[i].value / 10);
+          result += `${(rowInputs[i].value / 10) / 2.5}fr `;
+        }
+        console.log(sum);
+        result += `${(10 - sum)  / 2.5}fr`;
+        console.log(result);
+        grid.style.gridTemplateRows = result;
+      }
   </script>
 </body>
 
