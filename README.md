@@ -1,2 +1,8 @@
-# web-tech
-Testing ground for web tech
+# board
+
+- Movable
+- Resizable
+- Layout (flex, grid etc.)
+- Draggable
+- Droppable
+- Card-Part
