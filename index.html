@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOARD</title>
+  <style>
+    .movable {
+      position: absolute;
+      text-align: center;
+      border: 1px solid #d3d3d3;
+      background-color: white;
+    }
+
+    .movable:focus-within {
+      z-index: 1;
+    }
+
+    .movable-header {
+      padding: 10px;
+      cursor: move;
+      z-index: 10;
+      background-color: #2196F3;
+      color: #fff;
+    }
+
+    .movable-header-red {
+      background-color: red;
+    }
+
+    .draggable {
+      cursor: move;
+    }
+
+    .resizable {
+      resize: both;
+      overflow: auto;
+      min-height: 400px;
+      width: 350px;
+      min-width: 350px;
+    }
+
+    .layout {
+      background: white;
+      border: 2px solid;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .layout-row {
+      border: 1px solid black;
+      box-sizing: border-box;
+      flex-grow: 1;
+      flex-basis: 100%;
+      min-height: 100px;
+      background-color: #f1f1f1;
+    }
+
+    .main,
+    .subcard {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .horizontal-slider {
+      margin: auto;
+    }
+
+    .main {
+      background-color: aliceblue;
+    }
+
+    input[type="range"] {
+      cursor: pointer;
+      display: block;
+    }
+
+    :root {
+      --click-count: 100fr;
+    }
+
+    .layout-grid {
+      background: white;
+      resize: both;
+      overflow: auto;
+      display: grid;
+      width: 600px;
+      min-width: 600px;
+      min-height: 500px;
+      grid-template-rows: repeat(auto-fit, minmax(auto, 1fr));
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .layout-grid2 {
+      background: white;
+      resize: both;
+      overflow: auto;
+      display: grid;
+      width: 600px;
+      min-width: 600px;
+      min-height: 500px;
+      grid-template-rows: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .layout-item {
+      border: 1px solid black;
+      grid-column: span 4;
+      background-color: #f1f1f1;
+    }
+
+    .overflow-auto {
+      overflow-y: auto;
+    }
+
+    .layout-item.subcard {
+      height: calc(100% - 100px);
+    }
+
+    .layout-item:first-child {
+      grid-column: 1 / -1;
+    }
+
+    input[type="number"] {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="board">
+    <div class="movable js-movable" tabindex="1">
+      <div class="movable-header js-movable-header">Click here to move</div>
+      <div class="layout-grid resizable js-resizable" data-card-id="3">
+        <div id="1" class="layout-item main">
+          <h1>MAINCARD GRID</h1>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+            expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+            quae eius mollitia?
+          </p>
+          <button>BUTTON</button>
+          height
+          <input id="height1" type="number" value="1" min="1" max="10" onchange="onHeightChange(this)">
+        </div>
+
+        <div id="2" class="layout-item js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop7">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag7">
+            <h2>SUBCARD 1</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width2" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+          height
+          <input id="height2" type="number" value="1" min="1" max="10" onchange="onHeightChange(this)">
+        </div>
+        <div id="3" class="layout-item js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop8">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag8">
+            <h2>SUBCARD 2</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <button>BUTTON</button>
+          </div>
+          width
+          <input id="width3" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+          height
+          <input id="height3" type="number" value="1" min="1" max="10" onchange="onHeightChange(this)">
+        </div>
+        <div id="4" class="layout-item js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop9">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag9">
+            <h2>SUBCARD 3</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width4" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+          height
+          <input id="height4" type="number" value="1" min="1" max="10" onchange="onHeightChange(this)">
+        </div>
+      </div>
+    </div>
+    <div class="movable js-movable" tabindex="1">
+      <div class="movable-header js-movable-header">Click here to move</div>
+      <input id="row1" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row1Change(this)">
+      <input id="row2" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row2Change(this)">
+      <input id="row3" class="js-row-input" type="number" value="25" min="5" max="45" onchange="row3Change(this)">
+      <div class="layout-grid2 js-layout-grid2 resizable js-resizable" data-card-id="4">
+        <div id="5" class="layout-item main">
+          <h1>MAINCARD GRID - 3 ROWS</h1>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+            expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+            quae eius mollitia?
+          </p>
+          <button>BUTTON</button>
+        </div>
+
+        <div id="6" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop10">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag10">
+            <h2>SUBCARD 1</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width6" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+        <div id="7" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop11">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag11">
+            <h2>SUBCARD 2</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <button>BUTTON</button>
+          </div>
+          width
+          <input id="width7" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+        <div id="8" class="layout-item overflow-auto js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop12">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag12">
+            <h2>SUBCARD 3</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          width
+          <input id="width8" type="number" value="4" min="1" max="4" onchange="onWidthChange(this)">
+        </div>
+      </div>
+    </div>
+
+    <div class="movable js-movable" tabindex="1">
+      <div class="movable-header js-movable-header">Click here to move</div>
+      <div class="layout resizable js-resizable" data-card-id="1">
+        <div class="layout-row main">
+          <h1>MAINCARD FLEX</h1>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+            expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+            quae eius mollitia?
+          </p>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+            expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+            quae eius mollitia?
+          </p>
+          <button>BUTTON</button>
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop1">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag1">
+            <h2>SUBCARD</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop2">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag2">
+            <h2>SUBCARD 2</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop3">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag3">
+            <h2>SUBCARD 3</h2>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere voluptatibus, ducimus adipisci dolores
+              expedita similique illum odit nisi quaerat ullam ratione cupiditate. Magni debitis natus saepe, molestiae
+              quae eius mollitia?
+            </p>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+      </div>
+    </div>
+
+    <div class="movable js-movable">
+      <div class="movable-header movable-header-red js-movable-header">Click here to move</div>
+      <div class="layout resizable js-resizable" data-card-id="2">
+        <div class="layout-row main">
+          <h1>MAINCARD FLEX</h1>
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop4">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag4">
+            <h2>SUBCARD 1</h2>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop5">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag5">
+            <h2>SUBCARD 2</h2>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+        <div class="layout-row js-droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop6">
+          <div class="subcard draggable js-draggable" draggable="true" ondragstart="drag(event)" id="drag6">
+            <h2>SUBCARD 3</h2>
+          </div>
+          <input class="horizontal-slider" type="range" min="0" max="100" value="100" step="25"
+            onchange="sliderChanged(this)">
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    const draggableElements = document.getElementsByClassName('js-movable');
+    for (var i = 0; i < draggableElements.length; i++) {
+      dragElement(draggableElements[i]);
+    }
+
+
+    function dragElement(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+      if (elmnt.querySelector('.js-movable-header')) {
+        elmnt.querySelector('.js-movable-header').onmousedown = dragMouseDown;
+      } else {
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev, fromParent) {
+      ev.dataTransfer.setData("text", ev.target.id);
+      ev.dataTransfer.setData("parent", ev.target.parentElement.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      const draggedElement = document.getElementById(data);
+      const currentDraggable = ev.target.closest('.js-draggable');
+      closestDroppable = ev.target.closest('.js-droppable');
+      closestDroppable.insertBefore(draggedElement, closestDroppable.childNodes[0]);
+      if (currentDraggable) {
+        const prevParentId = ev.dataTransfer.getData("parent");
+        const prevDroppable = document.getElementById(prevParentId);
+        const el = document.getElementById(currentDraggable.id);
+        prevDroppable.insertBefore(el, prevDroppable.childNodes[0]);
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        if (entry.contentBoxSize) {
+          const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
+          // entry.target.parentElement.focus();
+          console.log(`Size changed for card id: ${entry.target.dataset.cardId} to height: ${contentBoxSize.blockSize} and width: ${contentBoxSize.inlineSize}`);
+        }
+      }
+    });
+
+    const resizableElements = document.getElementsByClassName('js-resizable');
+
+    for (var i = 0; i < resizableElements.length; i++) {
+      resizeObserver.observe(resizableElements[i]);
+    }
+
+    function sliderChanged(element) {
+      element.parentElement.style.flexBasis = `${element.value}%`;
+    }
+
+    function onHeightChange(element) {
+      const parentElement = document.getElementById(element.id).parentElement;
+      parentElement.style.gridRow = `span ${element.value}`;
+    }
+
+    function onWidthChange(element) {
+      const parentElement = document.getElementById(element.id).parentElement;
+      parentElement.style.gridColumn = `span ${element.value}`;
+    }
+
+    function row1Change(element) {
+        const nextElement = document.getElementById('row2');
+        nextElement.value = 50 - element.value;
+        updateRowHeights();
+      }
+      function row2Change(element) {
+        const nextElement = document.getElementById('row3');
+        nextElement.value = 50 - element.value;
+        updateRowHeights();
+      }
+      function row3Change(element) {
+        updateRowHeights();
+      }
+      function updateRowHeights(){
+        const grid = document.getElementsByClassName('js-layout-grid2')[0];
+        const rowInputs = document.getElementsByClassName('js-row-input');
+
+        let result = '';
+        let sum = 0;
+        for (var i = 0; i < rowInputs.length; i++) {
+          sum += Number(rowInputs[i].value / 10);
+          result += `${(rowInputs[i].value / 10) / 2.5}fr `;
+        }
+        console.log(sum);
+        result += `${(10 - sum)  / 2.5}fr`;
+        console.log(result);
+        grid.style.gridTemplateRows = result;
+      }
+  </script>
+</body>
+
+</html>
